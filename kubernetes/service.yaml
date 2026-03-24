@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: receipt-parser-api-service
+  labels:
+    app: receipt-parser-api # Optional: useful for organization
+spec:
+  type: ClusterIP # Default type, exposes the service on an internal IP in the cluster.
+                 # Use LoadBalancer for external exposure on cloud providers, or NodePort for specific node port.
+                 # For HTTP/S traffic, an Ingress controller is typically used in front of a ClusterIP service.
+  selector:
+    app: receipt-parser-api # This MUST match the labels of the Pods in your Deployment
+  ports:
+  - name: http # Optional: name of the port
+    protocol: TCP
+    port: 80 # Port on which the service will be available within the cluster
+             # Could also be 3000 if you want to use the same port internally as the targetPort
+    targetPort: 3000 # Port on the Pods/Containers that the service will forward traffic to
+                     # This must match the containerPort defined in your Deployment and what the app listens on.

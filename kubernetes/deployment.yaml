@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: receipt-parser-api
+  labels:
+    app: receipt-parser-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: receipt-parser-api
+  template:
+    metadata:
+      labels:
+        app: receipt-parser-api
+    spec:
+      containers:
+      - name: receipt-parser-api-container
+        image: YOUR_DOCKER_REGISTRY/receipt-parser-api:latest # Placeholder - Replace with your actual image path
+        ports:
+        - containerPort: 3000 # Should match the port your application listens on (and EXPOSEd in Dockerfile)
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "3000"
+        # Secrets - These should be created in your Kubernetes cluster
+        # Example: kubectl create secret generic app-secrets --from-literal=DATABASE_URL='...' --from-literal=OPENAI_API_KEY='...'
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets # Name of your Kubernetes secret
+              key: DATABASE_URL
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: OPENAI_API_KEY
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: JWT_SECRET
+        - name: GOOGLE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: GOOGLE_CLIENT_ID
+        - name: GOOGLE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: GOOGLE_CLIENT_SECRET
+        - name: GOOGLE_REDIRECT_URI # This might be specific to your K8s Ingress/Service setup if it differs from local
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: GOOGLE_REDIRECT_URI
+        # eBay Credentials
+        - name: EBAY_APP_ID # Often referred to as Client ID
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: EBAY_APP_ID
+        - name: EBAY_CERT_ID # Often referred to as Client Secret
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: EBAY_CERT_ID
+        - name: EBAY_RU_NAME # Your eBay RuName
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: EBAY_RU_NAME
+        - name: EBAY_ENVIRONMENT # "SANDBOX" or "PRODUCTION"
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: EBAY_ENVIRONMENT
+        # EBAY_REDIRECT_URI might also be needed if it's static and part of secrets
+        # If EBAY_REDIRECT_URI is derived or needs to point to the K8s service,
+        # it might be constructed differently or set in a config map / ingress.
+        # For simplicity, assuming it can be a secret if static.
+        - name: EBAY_REDIRECT_URI
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: EBAY_REDIRECT_URI
+
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 3000
+          initialDelaySeconds: 15 # Time to wait before first probe
+          periodSeconds: 20     # How often to perform the probe
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 3000
+          initialDelaySeconds: 20 # Give more time for initial readiness (e.g., DB connection)
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: "100m" # 0.1 CPU core
+            memory: "128Mi" # 128 Megabytes
+          limits:
+            cpu: "500m" # 0.5 CPU core
+            memory: "512Mi" # 512 Megabytes

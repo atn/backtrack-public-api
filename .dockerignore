@@ -1,0 +1,26 @@
+node_modules
+npm-debug.log
+yarn-error.log
+.DS_Store
+.env
+.env.*
+!/.env.example
+.git
+.gitignore
+README.md
+Dockerfile
+.dockerignore
+src/test_results # Example if you have test results dir
+coverage/ # Example for coverage reports
+# Any local configuration files not meant for the image
+*.pem
+*.key
+# Add any other files/dirs not needed in the image
+# For example, if you have a kubernetes/ or terraform/ dir at root
+# kubernetes/
+# terraform/
+# IDE-specific folders
+.idea/
+.vscode/
+# OS-specific files
+Thumbs.db

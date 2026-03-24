@@ -1,0 +1,51 @@
+{
+  "name": "bactrack-api",
+  "version": "1.0.0",
+  "description": "Backend API for Bactrack - receipt processing and resale listing platform",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atn/bactrack-api-alpha.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/atn/bactrack-api-alpha/issues"
+  },
+  "homepage": "https://github.com/atn/bactrack-api-alpha#readme",
+  "dependencies": {
+    "@fastify/cors": "^11.0.1",
+    "@jrmdayn/googleapis-batcher": "^0.8.0",
+    "@prisma/client": "^6.9.0",
+    "axios": "^1.6.0",
+    "bcrypt": "^6.0.0",
+    "chai": "^4.3.10",
+    "dotenv": "^16.5.0",
+    "duck-duck-scrape": "^2.2.7",
+    "duckduckgo-images-api": "^1.0.5",
+    "ebay-api": "^9.2.0",
+    "expo-server-sdk": "^3.15.0",
+    "fastify": "^5.3.3",
+    "g-i-s": "^2.1.7",
+    "googleapis": "^149.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "node-cron": "^4.1.0",
+    "openai": "^5.1.0",
+    "pino": "^9.7.0",
+    "prisma": "^6.9.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.4.1",
+    "prettier": "^3.5.3"
+  }
+}
